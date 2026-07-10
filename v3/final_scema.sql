@@ -1,9 +1,4 @@
--- ============================================================
--- SESSION SETTING: suppress informational NOTICEs (e.g. "table does
--- not exist, skipping" / "extension already exists, skipping") so
--- pgAdmin's Messages tab only shows real WARNINGs/ERRORs and the
--- final "Query returned successfully" status.
--- ============================================================
+
 SET client_min_messages TO WARNING;
 
 
@@ -43,13 +38,9 @@ DROP TABLE IF EXISTS content_rating_levels CASCADE;  -- removed in this version,
 -- ============================================================
 -- PROJECT  : Netflix-Type Streaming Platform
 -- DATABASE : PostgreSQL
--- VERSION  : 5.0 — Final Production-Ready DDL (Resume Edition)
+
 -- TABLES   : 25
--- MODULES  : Content & Catalog · Users & Accounts · Engagement
--- NOTES    : All PK / FK / UQ / CHK constraints verified.
---            Partial unique indexes follow each relevant table.
---            Run this script top-to-bottom in one transaction.
---
+
 -- CHANGES FROM v3:
 --   • REMOVED content_rating_levels table entirely (no more
 --     age-certification / age-rating-limit system in this version).
