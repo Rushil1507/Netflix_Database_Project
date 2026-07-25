@@ -1,0 +1,289 @@
+erDiagram
+    content ||--o{ content_availability : "content_id"
+    actors ||--o{ content_cast : "actor_id"
+    content ||--o{ content_cast : "content_id"
+    content ||--o{ content_genres : "content_id"
+    genres ||--o{ content_genres : "genre_id"
+    content ||--o{ content_languages : "content_id"
+    languages ||--o{ content_languages : "language_id"
+    content ||--o{ content_parts : "content_id"
+    content ||--o{ downloads : "content_id"
+    user_devices ||--o{ downloads : "device_id"
+    episodes ||--o{ downloads : "episode_id"
+    profiles ||--o{ downloads : "profile_id"
+    seasons ||--o{ episodes : "season_id"
+    content ||--o{ my_list : "content_id"
+    profiles ||--o{ my_list : "profile_id"
+    subscriptions ||--o{ payments : "subscription_id"
+    users ||--o{ payments : "user_id"
+    subscription_plans ||--o{ plan_allowed_devices : "plan_id"
+    profiles ||--o{ profile_preferences : "profile_id"
+    genres ||--o{ profile_preferred_genres : "genre_id"
+    profiles ||--o{ profile_preferred_genres : "profile_id"
+    users ||--o{ profiles : "user_id"
+    content ||--o{ ratings : "content_id"
+    episodes ||--o{ ratings : "episode_id"
+    content_parts ||--o{ ratings : "part_id"
+    profiles ||--o{ ratings : "profile_id"
+    seasons ||--o{ ratings : "season_id"
+    user_devices ||--o{ search_history : "device_id"
+    profiles ||--o{ search_history : "profile_id"
+    content ||--o{ seasons : "content_id"
+    subscription_plans ||--o{ subscriptions : "plan_id"
+    users ||--o{ subscriptions : "user_id"
+    users ||--o{ user_devices : "user_id"
+    content ||--o{ watch_history : "content_id"
+    episodes ||--o{ watch_history : "episode_id"
+    profiles ||--o{ watch_history : "profile_id"
+
+    actors {
+        bigint actor_id PK
+        varchar_255 actor_name
+        date date_of_birth
+        varchar_20 gender
+        varchar_100 nationality
+        text bio
+        text photo_url
+    }
+    content {
+        bigint content_id PK
+        varchar_255 title
+        text description
+        varchar_20 content_type
+        varchar_50 content_category
+        date release_date
+        int duration_minutes
+        text poster_url
+        text trailer_url
+        varchar_20 status
+        timestamp created_at
+        timestamp updated_at
+    }
+    content_availability {
+        bigint availability_id PK
+        bigint content_id FK
+        varchar_10 country_code
+        date available_from
+        date available_to
+        text region_notes
+    }
+    content_cast {
+        bigint cast_id PK
+        bigint content_id FK
+        bigint actor_id FK
+        varchar_255 character_name
+        int cast_order
+        boolean is_main_cast
+    }
+    content_genres {
+        bigint content_id PK,FK
+        bigint genre_id PK,FK
+    }
+    content_languages {
+        bigint content_language_id PK
+        bigint content_id FK
+        bigint language_id FK
+        varchar_20 language_type
+        boolean is_default
+    }
+    content_parts {
+        bigint part_id PK
+        bigint content_id FK
+        int part_number
+        varchar_255 title
+        text description
+        int duration_minutes
+        date release_date
+        text video_url
+        text thumbnail_url
+        timestamp created_at
+        timestamp updated_at
+    }
+    downloads {
+        bigint download_id PK
+        bigint profile_id FK
+        bigint content_id FK
+        bigint episode_id FK
+        bigint device_id FK
+        timestamp downloaded_at
+        date expiry_date
+        numeric_102 file_size_mb
+        varchar_20 download_status
+    }
+    episodes {
+        bigint episode_id PK
+        bigint season_id FK
+        int episode_number
+        varchar_255 title
+        text description
+        int duration_minutes
+        date release_date
+        text video_url
+        text thumbnail_url
+        timestamp created_at
+        timestamp updated_at
+    }
+    genres {
+        bigint genre_id PK
+        varchar_100 genre_name
+        text description
+    }
+    languages {
+        bigint language_id PK
+        varchar_100 language_name
+        varchar_10 language_code
+    }
+    my_list {
+        bigint my_list_id PK
+        bigint profile_id FK
+        bigint content_id FK
+        timestamp added_at
+    }
+    payments {
+        bigint payment_id PK
+        bigint subscription_id FK
+        bigint user_id FK
+        numeric_102 amount
+        character_3 currency
+        varchar_20 payment_method
+        varchar_20 payment_status
+        varchar_255 transaction_id
+        varchar_50 gateway_name
+        json gateway_response
+        character_4 card_last4
+        varchar_20 card_brand
+        varchar_100 upi_id
+        varchar_50 upi_app
+        varchar_500 billing_address
+        varchar_500 invoice_url
+        numeric_102 refund_amount
+        timestamp refunded_at
+        timestamp paid_at
+        timestamp created_at
+    }
+    plan_allowed_devices {
+        int plan_id PK,FK
+        varchar_20 device_type PK
+    }
+    profile_preferences {
+        bigint preference_id PK
+        bigint profile_id FK
+        character_5 audio_language
+        varchar_10 default_quality
+        boolean notifications_on
+        boolean new_releases_notif
+        boolean continue_watching
+        varchar_10 ui_theme
+        character_5 language
+        boolean autoplay_next
+        boolean autoplay_previews
+        timestamp created_at
+        timestamp updated_at
+    }
+    profile_preferred_genres {
+        bigint profile_id PK,FK
+        bigint genre_id PK,FK
+    }
+    profiles {
+        bigint profile_id PK
+        bigint user_id FK
+        varchar_50 profile_name
+        varchar_500 avatar_url
+        boolean is_kids
+        boolean is_primary
+        timestamp created_at
+        timestamp updated_at
+    }
+    ratings {
+        bigint rating_id PK
+        bigint profile_id FK
+        bigint content_id FK
+        bigint season_id FK
+        bigint episode_id FK
+        bigint part_id FK
+        boolean is_liked
+        text review_text
+        timestamp created_at
+        timestamp updated_at
+    }
+    search_history {
+        bigint search_id PK
+        bigint profile_id FK
+        text search_query
+        timestamp searched_at
+        int result_count
+        bigint device_id FK
+    }
+    seasons {
+        bigint season_id PK
+        bigint content_id FK
+        int season_number
+        varchar_255 title
+        text description
+        date release_date
+        timestamp created_at
+        timestamp updated_at
+    }
+    subscription_plans {
+        int plan_id PK
+        varchar_50 plan_name
+        numeric_82 price_monthly
+        numeric_82 price_yearly
+        character_3 currency
+        smallint max_screens
+        smallint max_profiles
+        varchar_20 video_quality
+        boolean hdr_support
+        boolean dolby_atmos
+        int max_downloads
+        boolean ads_supported
+        boolean is_active
+        timestamp created_at
+        timestamp updated_at
+    }
+    subscriptions {
+        bigint subscription_id PK
+        bigint user_id FK
+        int plan_id FK
+        varchar_20 status
+        varchar_10 billing_cycle
+        date start_date
+        date end_date
+        date next_billing_date
+        boolean auto_renew
+        timestamp cancelled_at
+        varchar_255 cancellation_reason
+        timestamp created_at
+        timestamp updated_at
+    }
+    user_devices {
+        bigint device_id PK
+        bigint user_id FK
+        varchar_30 os_type
+        varchar_20 device_type
+        timestamp last_active_at
+    }
+    users {
+        bigint user_id PK
+        varchar_255 email
+        varchar_255 password_hash
+        varchar_150 full_name
+        varchar_20 phone_number
+        date date_of_birth
+        character_2 country_code
+        varchar_20 account_status
+        boolean email_verified
+        varchar_500 avatar_url
+        timestamp created_at
+        timestamp updated_at
+    }
+    watch_history {
+        bigint watch_id PK
+        bigint profile_id FK
+        bigint content_id FK
+        bigint episode_id FK
+        timestamp watched_at
+        int watch_duration_seconds
+        int progress_seconds
+        boolean completed
+    }
